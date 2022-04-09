@@ -4,8 +4,11 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.material.*
 import androidx.compose.runtime.*
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
@@ -24,9 +27,9 @@ class MainActivity : ComponentActivity() {
 }
 
 @Composable
-private fun Greetings(names: List<String> = listOf("World", "Compose")) {
-    Column(modifier = Modifier.padding(vertical = 4.dp)) {
-        for (name in names) {
+private fun Greetings(names: List<String> = List(1000) { "$it" }) {
+    LazyColumn(modifier = Modifier.padding(vertical = 4.dp)) {
+        items(items = names) { name ->
             Greeting(name = name)
         }
     }
@@ -34,7 +37,8 @@ private fun Greetings(names: List<String> = listOf("World", "Compose")) {
 
 @Composable
 fun MyApp(names: List<String> = listOf("World", "Compose")) {
-    var shouldShowOnboarding by remember { mutableStateOf(true) }
+    //Instead of using remember you can use rememberSaveable. This will save each state surviving configuration changes (such as rotations) and process death.
+    var shouldShowOnboarding by rememberSaveable { mutableStateOf(true) }
 
     if (shouldShowOnboarding) {
         OnboardingScreen(onContinueClicked = { shouldShowOnboarding = false })
@@ -47,7 +51,7 @@ fun MyApp(names: List<String> = listOf("World", "Compose")) {
 @Composable
 fun Greeting(name: String) {
 
-    val expanded = remember { mutableStateOf(false) }
+    val expanded = rememberSaveable { mutableStateOf(false) }
     val extraPadding = if (expanded.value) 48.dp else 0.dp
 
     Surface(

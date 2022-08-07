@@ -41,7 +41,7 @@ class MainActivity : ComponentActivity() {
 
 @Composable
 private fun Greetings(names: List<String> = List(1000) { "$it" }) {
-    LazyColumn(modifier = Modifier.padding(vertical = 4.dp)) {
+    LazyColumn(contentPadding = PaddingValues(vertical = 4.dp)) {
         items(items = names) { name ->
             Greeting(name = name)
         }
@@ -49,9 +49,10 @@ private fun Greetings(names: List<String> = List(1000) { "$it" }) {
 }
 
 @Composable
-fun MyApp(names: List<String> = listOf("World", "Compose")) {
+fun MyApp() {
     //Instead of using remember you can use rememberSaveable. This will save each state surviving configuration changes (such as rotations) and process death.
     var shouldShowOnboarding by rememberSaveable { mutableStateOf(true) }
+
 
     if (shouldShowOnboarding) {
         OnboardingScreen(onContinueClicked = { shouldShowOnboarding = false })
@@ -66,14 +67,13 @@ fun Greeting(name: String) {
 
     val expanded = rememberSaveable { mutableStateOf(false) }
 
-
     Surface(
         color = MaterialTheme.colors.primary,
         modifier = Modifier.padding(vertical = 4.dp, horizontal = 8.dp)
-
     ) {
         Row(
-            modifier = Modifier.padding(24.dp)
+            modifier = Modifier
+                .padding(24.dp)
                 .animateContentSize(
                     animationSpec = spring(
                         dampingRatio = Spring.DampingRatioMediumBouncy,
@@ -82,10 +82,9 @@ fun Greeting(name: String) {
                 )
         ) {
             Column(
-                modifier = Modifier
-                    .weight(1f)
+                modifier = Modifier.weight(1f)
             ) {
-                Text(text = "Hello,")
+                Text(text = "Hello, Jetpack Compose")
                 Text(
                     text = name, style = MaterialTheme.typography.h4.copy(
                         fontWeight = FontWeight.ExtraBold
@@ -93,8 +92,9 @@ fun Greeting(name: String) {
                 )
                 if (expanded.value) {
                     Text(
-                        text = ("Composem ipsum color sit lazy, " +
-                                "padding theme elit, sed do bouncy. ").repeat(4),
+                        text = ("Composem ipsum color sit lazy, " + "padding theme elit, sed do bouncy. " + "" + "").repeat(
+                            4
+                        ),
                     )
                 }
             }
@@ -117,10 +117,7 @@ fun Greeting(name: String) {
 }
 
 @Preview(
-    showBackground = true,
-    widthDp = 320,
-    uiMode = UI_MODE_NIGHT_YES,
-    name = "DefaultPreviewDark"
+    showBackground = true, widthDp = 320, uiMode = UI_MODE_NIGHT_YES, name = "DefaultPreviewDark"
 )
 @Preview(showBackground = true, widthDp = 320)
 @Composable
@@ -142,8 +139,7 @@ fun OnboardingScreen(onContinueClicked: () -> Unit) {
         ) {
             Text("Welcome to the Basics Codelab!")
             Button(
-                modifier = Modifier.padding(vertical = 24.dp),
-                onClick = onContinueClicked
+                modifier = Modifier.padding(vertical = 24.dp), onClick = onContinueClicked
             ) {
                 Text("Continue")
             }

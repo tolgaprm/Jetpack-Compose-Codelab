@@ -1,6 +1,7 @@
 package com.prmto.stateinjetpackcompose
 
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.Button
 import androidx.compose.material.Text
@@ -14,9 +15,23 @@ fun WaterCounter(modifier: Modifier = Modifier) {
         // Changes to count are now tracked by Compose
         var count by remember { mutableStateOf(0) }
 
-        Text("You've had $count glasses.")
-        Button(onClick = { count++ }, Modifier.padding(top = 8.dp)) {
-            Text("Add one")
+        if (count > 0) {
+            var showTask by remember { mutableStateOf(true) }
+            if (showTask) {
+                WellnessTaskItem(
+                    onClose = { showTask = false },
+                    taskName = "Have you taken your 15 minute walk today?"
+                )
+            }
+            Text("You've had $count glasses.")
+        }
+        Row(Modifier.padding(top = 8.dp)) {
+            Button(onClick = { count++ }, enabled = count < 10) {
+                Text("Add one")
+            }
+            Button(onClick = { count = 0 }, Modifier.padding(start = 8.dp)) {
+                Text("Clear water count")
+            }
         }
     }
 }
